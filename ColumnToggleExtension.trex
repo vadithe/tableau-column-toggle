@@ -11,8 +11,7 @@
     <Description>Toggle grouped columns under main categories in Tableau dashboard</Description>
     <Version>1.0</Version>
     <!-- Update this URL to where your hosted index.html is -->
-    <Script>https://yourdomain.com/path/to/index.html</Script>
-
+    <Script>https://vadithe.github.io/tableau-column-toggle/index.html</Script> 
     <!-- Optional: Define parameters for customization here -->
     <!--
     <Parameters>
