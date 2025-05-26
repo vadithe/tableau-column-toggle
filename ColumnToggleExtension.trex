@@ -2,9 +2,7 @@
 <ExtensionManifest
     xmlns="http://tableau.com/extensions/extension-manifest"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://tableau.com/extensions/extension-manifest
-                        http://tableau.github.io/extensions-api/schemas/extension-manifest-1.1.xsd"
-    extensionNamespace="com.yourcompany.columntoggle"
+    extensionNamespace="com.vadithe.columntoggle"
     version="1.0">
 
   <ExtensionObject>
