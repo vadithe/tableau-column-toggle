@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ExtensionManifest xmlns="http://tableau.com/extensions/extension-manifest"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://tableau.com/extensions/extension-manifest https://tableau.github.io/extensions-api/schemas/extension-manifest.xsd"
@@ -11,12 +11,12 @@
     <Version>1.0.0</Version>
 
     <Author>
-      <Name>vedantu</Name>
-      <Email>venkatesh.naik@vedantu.com</Email>
+      <Name>Your Company</Name>
+      <Email>support@yourcompany.com</Email>
     </Author>
 
-    <Source location="https://vadithe.github.io/tableau-column-toggle/index.html" />
-    <Script src="https://vadithe.github.io/tableau-column-toggle/index.html" />
+    <Source location="https://vadithe.github.io/tableau-column-toggle/index.html"/>
+    <Script src="https://vadithe.github.io/tableau-column-toggle/index.html"/>
 
     <RequiredResources>
       <Resource>tableau.extensions.1.latest.js</Resource>
