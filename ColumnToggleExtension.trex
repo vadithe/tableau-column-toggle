@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ExtensionManifest xmlns="http://tableau.com/extensions/manifest"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://tableau.com/extensions/manifest
-                                       https://tableau.github.io/extensions-api/schemas/extension-manifest.xsd"
+                   xsi:schemaLocation="http://tableau.com/extensions/manifest https://tableau.github.io/extensions-api/schemas/extension-manifest.xsd"
                    extensionNamespace="com.vadithe.columntoggle"
                    version="1.0">
-
+  
   <Extension>
     <Name>Column Toggle Extension</Name>
     <Description>Toggle grouped columns under main categories in Tableau dashboard</Description>
