@@ -1,24 +1,8 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ExtensionManifest xmlns="http://tableau.com/extensions/extension-manifest"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://tableau.com/extensions/extension-manifest
-                   http://tableau.github.io/extensions-api/schemas/extension-manifest-1.1.xsd"
-                   extensionNamespace="com.yourcompany.columntoggle"
-                   version="1.0">
-
-  <ExtensionObject>
-    <Name>Column Toggle Extension</Name>
-    <Description>Toggle grouped columns under main categories in Tableau dashboard</Description>
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionManifest extensionNamespace="com.vadithe.columntoggle" version="1.0">
+  <Extension>
+    <Name>Test Extension</Name>
     <Version>1.0</Version>
-    <!-- Update this URL to where your hosted index.html is -->
-    <Script>https://yourdomain.com/path/to/index.html</Script>
-
-    <!-- Optional: Define parameters for customization here -->
-    <!--
-    <Parameters>
-      <Parameter name="worksheetName" type="string" defaultValue="performance_tracker" />
-    </Parameters>
-    -->
-
-  </ExtensionObject>
+    <Source location="https://vadithe.github.io/tableau-column-toggle/index.html" />
+  </Extension>
 </ExtensionManifest>
