@@ -1,15 +1,22 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ExtensionManifest
-    xmlns="http://tableau.com/extensions/extension-manifest"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    extensionNamespace="com.vadithe.columntoggle"
-    version="1.0">
+<?xml version="1.0" encoding="utf-8"?>
+<ExtensionManifest xmlns="http://tableau.com/extensions/manifest"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://tableau.com/extensions/manifest
+                                       https://tableau.github.io/extensions-api/schemas/extension-manifest.xsd"
+                   extensionNamespace="com.vadithe.columntoggle"
+                   version="1.0">
 
-  <ExtensionObject>
+  <Extension>
     <Name>Column Toggle Extension</Name>
     <Description>Toggle grouped columns under main categories in Tableau dashboard</Description>
     <Version>1.0</Version>
-    <Script>https://vadithe.github.io/tableau-column-toggle/index.html</Script>
-  </ExtensionObject>
 
+    <Author>
+      <Name>Vadithe</Name>
+      <Email>your-email@example.com</Email>
+    </Author>
+
+    <Source location="https://vadithe.github.io/tableau-column-toggle/index.html" />
+    <Script src="https://vadithe.github.io/tableau-column-toggle/index.html" />
+  </Extension>
 </ExtensionManifest>
