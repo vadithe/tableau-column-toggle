@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await tableau.extensions.initializeAsync();
       const dashboard = tableau.extensions.dashboardContent.dashboard;
-      const worksheet = dashboard.worksheets.find(w => w.name === "Offline Tracker");
-      if (!worksheet) throw new Error("Worksheet 'Offline Tracker' not found");
+      const worksheet = dashboard.worksheets.find(w => w.name === "performance_tracker");
+      if (!worksheet) throw new Error("Worksheet 'performance_tracker' not found");
   
       const options = { maxRows: 0, ignoreAliases: false, ignoreSelection: true, includeAllColumns: true };
       const dataTable = await worksheet.getUnderlyingDataAsync(options);
   
-      // Map your groups and their child columns
+      // Define your column groups (adjust if needed)
       const groups = {
         "Attempted": [
           "Less than 15 min att", "Less than 30 min att", "30 to 1 att", "1 to 3 att",
@@ -31,43 +31,59 @@ document.addEventListener("DOMContentLoaded", async () => {
         ]
       };
   
-      // Extract columns and data rows from Tableau
+      // Extract column names from Tableau data
       const columns = dataTable.columns.map(c => c.fieldName);
+  
+      // Extract rows, mapping cell data by column name
       const rows = dataTable.data.map(row => {
         const obj = {};
         row.forEach((cell, i) => obj[columns[i]] = cell.formattedValue);
         return obj;
       });
   
-      // Build Tabulator columns with toggles
+      // Build Tabulator column definitions with toggle buttons
       let tabulatorColumns = [];
-  
-      // Helper to generate toggle buttons for groups
       const toggleStates = {}; // track expanded/collapsed state
   
-      Object.keys(groups).forEach(mainCol => {
-        toggleStates[mainCol] = false; // collapsed by default
+      // First, add all columns that are NOT in groups (for completeness)
+      const groupedColumns = new Set(Object.values(groups).flat());
+      const nonGroupedColumns = columns.filter(c => !groupedColumns.has(c));
   
-        // Add main column with toggle button
+      // Add non-grouped columns first (if any)
+      nonGroupedColumns.forEach(col => {
         tabulatorColumns.push({
-          title: `<span class="toggle-btn" data-group="${mainCol}">▶</span>${mainCol}`,
-          field: mainCol,
+          title: col,
+          field: col,
+          width: 120,
+        });
+      });
+  
+      // Add grouped columns with toggle buttons
+      Object.keys(groups).forEach(groupName => {
+        toggleStates[groupName] = false; // collapsed by default
+  
+        // Main group column with toggle button
+        tabulatorColumns.push({
+          title: `<span class="toggle-btn" data-group="${groupName}">▶</span>${groupName}`,
+          field: groupName,
           formatter: "plaintext",
           width: 150,
+          headerSort: false,
+          // The field here is dummy — no data for group column itself, but needed for header
         });
   
-        // Add child columns hidden by default
-        groups[mainCol].forEach(childCol => {
+        // Add child columns hidden initially
+        groups[groupName].forEach(childCol => {
           tabulatorColumns.push({
             title: childCol,
             field: childCol,
-            visible: false, // hide initially
+            visible: false,
             width: 120,
           });
         });
       });
   
-      // Initialize Tabulator
+      // Initialize Tabulator table
       const table = new Tabulator("#table", {
         data: rows,
         columns: tabulatorColumns,
@@ -75,16 +91,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         autoColumns: false,
       });
   
-      // Handle toggle button clicks
-      document.querySelector("#table").addEventListener("click", (e) => {
+      // Toggle button click handler
+      document.querySelector("#table").addEventListener("click", e => {
         if (e.target.classList.contains("toggle-btn")) {
           const group = e.target.getAttribute("data-group");
           toggleStates[group] = !toggleStates[group];
-  
-          // Update toggle arrow
           e.target.textContent = toggleStates[group] ? "▼" : "▶";
   
-          // Show or hide child columns accordingly
           groups[group].forEach(childCol => {
             if (toggleStates[group]) {
               table.showColumn(childCol);
@@ -97,6 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     } catch (err) {
       console.error(err);
-      document.body.innerHTML = "<h3>Error loading extension: " + err.message + "</h3>";
+      document.body.innerHTML = `<h3>Error loading extension: ${err.message}</h3>`;
     }
-});
+  });
+  
