@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await tableau.extensions.initializeAsync();
       const dashboard = tableau.extensions.dashboardContent.dashboard;
-      const worksheet = dashboard.worksheets.find(w => w.name === "performance_tracker");
-      if (!worksheet) throw new Error("Worksheet 'performance_tracker' not found");
+      const worksheet = dashboard.worksheets.find(w => w.name === "Offline Tracker");
+      if (!worksheet) throw new Error("Worksheet 'Offline Tracker' not found");
   
       const options = { maxRows: 0, ignoreAliases: false, ignoreSelection: true, includeAllColumns: true };
       const dataTable = await worksheet.getUnderlyingDataAsync(options);
