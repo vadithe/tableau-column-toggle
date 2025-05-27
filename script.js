@@ -3,23 +3,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     await tableau.extensions.initializeAsync();
     const dashboard = tableau.extensions.dashboardContent.dashboard;
     const worksheet = dashboard.worksheets.find(w => w.name === "performance_tracker");
+
     if (!worksheet) throw new Error("Worksheet 'performance_tracker' not found");
 
     const options = {
       maxRows: 0,
       ignoreAliases: false,
       ignoreSelection: true,
-      includeAllColumns: true,
+      includeAllColumns: true
     };
 
     const dataTable = await worksheet.getUnderlyingDataAsync(options);
 
-    // Define your column groups
+    // DEBUG: Log column names and a sample row
+    const columns = dataTable.columns.map(c => c.fieldName);
+    console.log("Raw columns from Tableau:", columns);
+    console.log("Number of columns:", dataTable.columns.length);
+    console.log("Sample row data:", dataTable.data[0]);
+
+    // TEMPORARY DEBUG: Show column names on page
+    const colList = columns.join("<br>");
+    document.body.innerHTML = `<h3>Available Columns:</h3><div>${colList}</div>`;
+    
+    // RETURN EARLY to debug first — comment this return line out later when ready
+    return;
+
+    // Group definitions (once debugged, uncomment below to use)
     const groups = {
       "Attempted": [
         "Less than 15 min att", "Less than 30 min att", "30 to 1 att", "1 to 3 att",
         "3 to 6 att", "6 to 12 att", "12 to 24 att", "24 to 48 att", "48 to 72 att", ">72 att",
-        "<15 min att%", "15-30 att%", "30-1% att", "1-3hr % att", "3-6 % att", "6-12 % att",
+        "<15 min att%", "15-30 att%", "30-1 % att", "1-3hr % att", "3-6 % att", "6-12 % att",
         "12-24 % att", "24-48 % att", "48-72 % att", ">72 % att"
       ],
       "Connected": [
@@ -37,17 +51,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       ]
     };
 
-    const columns = dataTable.columns.map(c => c.fieldName);
+    // Extract rows
     const rows = dataTable.data.map(row => {
       const obj = {};
       row.forEach((cell, i) => obj[columns[i]] = cell.formattedValue);
       return obj;
     });
 
+    // Build Tabulator column definitions
     let tabulatorColumns = [];
     const toggleStates = {};
 
-    // Non-grouped columns
     const groupedColumns = new Set(Object.values(groups).flat());
     const nonGroupedColumns = columns.filter(c => !groupedColumns.has(c));
 
@@ -55,20 +69,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       tabulatorColumns.push({
         title: col,
         field: col,
-        width: 150,
+        width: 120,
       });
     });
 
-    // Grouped columns with toggles
-    Object.keys(groups).forEach((groupName, index) => {
-      toggleStates[groupName] = index === 0; // First group expanded by default
-
-      // Toggle header
+    Object.keys(groups).forEach(groupName => {
+      toggleStates[groupName] = false;
       tabulatorColumns.push({
-        title: `<span class="toggle-btn" data-group="${groupName}">${toggleStates[groupName] ? "▼" : "▶"}</span> ${groupName}`,
-        field: groupName + "_header",
-        formatter: "html", // Important: allows HTML button rendering
-        width: 180,
+        title: `<span class="toggle-btn" data-group="${groupName}">▶</span> ${groupName}`,
+        field: groupName,
+        formatter: "plaintext",
+        width: 150,
         headerSort: false,
       });
 
@@ -76,27 +87,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         tabulatorColumns.push({
           title: childCol,
           field: childCol,
-          visible: toggleStates[groupName],
-          width: 150,
+          visible: false,
+          width: 120,
         });
       });
     });
 
-    // Build Tabulator table
+    // Initialize Tabulator
     const table = new Tabulator("#table", {
       data: rows,
       columns: tabulatorColumns,
       layout: "fitDataTable",
+      autoColumns: false,
     });
 
-    // Toggle handler
+    // Toggle button handler
     document.querySelector("#table").addEventListener("click", e => {
       if (e.target.classList.contains("toggle-btn")) {
         const group = e.target.getAttribute("data-group");
         toggleStates[group] = !toggleStates[group];
         e.target.textContent = toggleStates[group] ? "▼" : "▶";
-
-        console.log("Toggling group:", group, "New state:", toggleStates[group]);
 
         groups[group].forEach(childCol => {
           if (toggleStates[group]) {
